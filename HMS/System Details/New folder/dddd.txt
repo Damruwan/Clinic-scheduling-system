@@ -1,0 +1,249 @@
+USE hospitalmanagementsystem;
+CREATE TABLE doctordetails
+( DocID INT(3)NOT NULL,
+  WardID INT(2)NOT NULL,
+  FirstName VARCHAR(20) NOT NULL,
+  LastName VARCHAR(20) NOT NULL,
+  Address VARCHAR(50),
+  ContactNumber INT(10)NOT NULL,
+  Gender VARCHAR(6)NOT NULL,
+  DOBYear INT(4)NOT NULL,
+  DOBMonth VARCHAR(15)NOT NULL,
+  DOBDate INT(2)NOT NULL,
+  Age INT(3)NOT NULL,
+  CONSTRAINT PRIMARY KEY(DocID),
+  CONSTRAINT FOREIGN KEY(WardID) REFERENCES warddetaild(WardID) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=INNODB; 
+  
+
+
+
+
+USE hospitalmanagementsystem;
+CREATE TABLE doctordetails
+( DocID INT(3)NOT NULL AUTO_INCREMENT,
+  WardID INT(2)NOT NULL,
+  FirstName VARCHAR(20) NOT NULL,
+  LastName VARCHAR(20) NOT NULL,
+  Address VARCHAR(50),
+  ContactNumber INT(10)NOT NULL,
+  Gender VARCHAR(6)NOT NULL,
+  CONSTRAINT PRIMARY KEY(DocID),
+  CONSTRAINT FOREIGN KEY(WardID) REFERENCES warddetaild(WardID) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=INNODB; 
+  
+
+
+USE hospitalmanagementsystem;
+SELECT WardName,COUNT(RegID)AS 'NumberOfPatient' FROM warddetails CROSS JOIN patientdetails USING(WardID) GROUP BY(WardName);
+
+
+USE hospitalmanagementsystem;
+CREATE TABLE treatmentdetails
+( TreatmentID INT(6)NOT NULL AUTO_INCREMENT,
+  RegID INT(3)NOT NULL,
+  Treatment VARCHAR(50) NOT NULL,
+  PrescribeYear int(4) NOT NULL,
+  PrescribeMonth VARCHAR(15),
+  PrescribeDate INT(2)NOT NULL,
+  Result VARCHAR(50)NOT NULL,
+  TreatmentAmount int(6)NOT NULL,
+  CONSTRAINT PRIMARY KEY(TreatmentID),
+  CONSTRAINT FOREIGN KEY(RegID) REFERENCES patientdetaild(RegID) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=INNODB; 
+
+
+
+
+USE hospitalmanagementsystem;
+CREATE TABLE patientdetails
+( RegID INT(10)NOT NULL AUTO_INCREMENT,
+  ConformDoctorID INT(3)NOT NULL,
+  LeadingConsultorID INT(3)NOT NULL,
+  WardID INT(2)NOT NULL,
+  FirstName VARCHAR(20) NOT NULL,
+  LastName VARCHAR(20) NOT NULL,
+  Address VARCHAR(50),
+  ContactNumber INT(10)NOT NULL,
+  Gender VARCHAR(6)NOT NULL,
+  DOBYear INT(4)NOT NULL,
+  DOBMonth VARCHAR(15)NOT NULL,
+  DOBDate INT(2)NOT NULL,
+  Age INT(3)NOT NULL,
+  CONSTRAINT PRIMARY KEY(RegID)
+)ENGINE=INNODB; 
+  
+
+ Payment PAY=new Payment();
+        PAY.setRegID(new Integer(prid.getText()).intValue());
+        PAY.setTotalTestFee(dbo.getAllTestAmount(PAY));
+        System.out.print(PAY.getTotalTestFee());
+        PAY.setTotalTreatmentFee(dbo.getAllTreatmentAmount(PAY));
+        if(dbo.updatePayment(PAY)) {
+            JOptionPane.showMessageDialog(this, "Successfully Updated");
+            this.dispose();
+            return;
+        } else {
+            JOptionPane.showMessageDialog(this, "Error while Updating");
+            this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE );
+        }
+
+
+ PAY.setFullName(dbo.getName(PAY));
+        PAY.setTotalTestFee(dbo.getAllTestAmount(PAY));
+        PAY.setTotalTreatmentFee(dbo.getAllTreatmentAmount(PAY));
+
+
+
+USE hospitalmanagementsystem;
+CREATE TABLE salarydetails
+( SalaryID INT(10)NOT NULL AUTO_INCREMENT,
+  Post VARCHAR(20)NOT NULL,
+  EmpID INT(5) NOT NULL,
+  YearOfSalary int(4) NOT NULL,
+  MonthOfSalary VARCHAR(15),
+  NumberOfAttendence INT(2)NOT NULL,
+  SalaryRatePerDay INT(4)NOT NULL,
+  NumberOfOTHours INT(2)NOT NULL,
+  OTRatePerHour INT(3)NOT NULL,
+  CONSTRAINT PRIMARY KEY(SalaryID),
+  CONSTRAINT FOREIGN KEY(Post) REFERENCES doctordetaild(Post) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=INNODB; 
+
+
+USE hospitalmanagementsystem;
+CREATE TABLE warddetails
+( WardID INT(2)NOT NULL,
+  WardName VARCHAR(20)NOT NULL,
+  CONSTRAINT PRIMARY KEY(WardID)
+)ENGINE=INNODB; 
+  
+
+USE hospitalmanagementsystem;
+CREATE TABLE patientdetails
+( RegID INT(10)NOT NULL,
+  ConformDoctorID INT(3)NOT NULL,
+  LeadingConsultorID INT(3)NOT NULL,
+  WardID INT(2)NOT NULL,
+  FirstName VARCHAR(20) NOT NULL,
+  LastName VARCHAR(20) NOT NULL,
+  Address VARCHAR(50),
+  ContactNumber INT(10)NOT NULL,
+  Gender VARCHAR(6)NOT NULL,
+  DOBYear INT(4)NOT NULL,
+  DOBMonth VARCHAR(15)NOT NULL,
+  DOBDate INT(2)NOT NULL,
+  Age INT(3)NOT NULL,
+  CONSTRAINT PRIMARY KEY(RegID),
+  CONSTRAINT FOREIGN KEY(ConformDoctorID) REFERENCES doctordetails(DocID)ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FOREIGN KEY(LeadingConsultorID) REFERENCES doctordetails(DocID)ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FOREIGN KEY(WardID) REFERENCES warddetails(WardID)ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=INNODB; 
+
+
+USE hospitalmanagementsystem;
+CREATE TABLE nursedetails
+( NurseID INT(3)NOT NULL,
+  WardID INT(2)NOT NULL,
+  FirstName VARCHAR(20) NOT NULL,
+  LastName VARCHAR(20) NOT NULL,
+  Address VARCHAR(50),
+  ContactNumber INT(10)NOT NULL,
+  Gender VARCHAR(6)NOT NULL,
+  DOBYear INT(4)NOT NULL,
+  DOBMonth VARCHAR(15)NOT NULL,
+  DOBDate INT(2)NOT NULL,
+  Age INT(3)NOT NULL,
+  CONSTRAINT PRIMARY KEY(NurseID),
+  CONSTRAINT FOREIGN KEY(WardID) REFERENCES warddetails(WardID) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=INNODB; 
+  
+  
+
+
+USE hospitalmanagementsystem;
+CREATE TABLE testdetails
+( TestID INT(6)NOT NULL ,
+  RegID INT(3)NOT NULL,
+  TestName VARCHAR(50) NOT NULL,
+  TestYear INT(4) NOT NULL,
+  TestMonth VARCHAR(15),
+  TestDate INT(2)NOT NULL,
+  TestInformation VARCHAR(50)NOT NULL,
+  TestAmount INT(6)NOT NULL,
+  CONSTRAINT PRIMARY KEY(TestID),
+  CONSTRAINT FOREIGN KEY(RegID) REFERENCES patientdetails(RegID) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=INNODB; 
+
+
+
+USE hospitalmanagementsystem;
+CREATE TABLE paymentdetails
+( PaymentID INT(6)NOT NULL ,
+  RegID INT(3)NOT NULL,
+  FullName VARCHAR(50) NOT NULL,
+  RegistrationFee INT(4) NOT NULL,
+  FacilitiesFee INT(4),
+  LeadingConsultantFee INT(6)NOT NULL,
+  ExaminAnotherDoctor INT(6)NOT NULL,
+  TotalTestFee INT(10)NOT NULL,
+  TotalTreatmentFee INT(10)NOT NULL,
+  CONSTRAINT PRIMARY KEY(PaymentID),
+  CONSTRAINT FOREIGN KEY(RegID) REFERENCES patientdetails(RegID) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=INNODB; 
+
+USE hospitalmanagementsystem;
+CREATE TABLE salarydetails
+( SalaryID INT(10)NOT NULL , 
+  EmpID INT(3) NOT NULL,
+  Post VARCHAR(20)NOT NULL,
+  YearOfSalary INT(4) NOT NULL,
+  MonthOfSalary VARCHAR(15),
+  NumberOfAttendence INT(2)NOT NULL,
+  SalaryRatePerDay INT(4)NOT NULL,
+  NumberOfOTHours INT(2)NOT NULL,
+  OTRatePerHour INT(3)NOT NULL,
+  CONSTRAINT PRIMARY KEY(SalaryID),
+  CONSTRAINT FOREIGN KEY(EmpID) REFERENCES doctordetails(DocID) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FOREIGN KEY(EmpID) REFERENCES nursedetails(NurseID) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FOREIGN KEY(EmpID) REFERENCES maintenansstaffdetails(MemberID) ON DELETE CASCADE ON UPDATE CASCADE
+  
+)ENGINE=INNODB; 
+
+
+
+
+
+USE hospitalmanagementsystem;
+CREATE TABLE maintenanceStaffdetails
+( MemberID INT(3)NOT NULL,
+  WardID INT(2)NOT NULL,
+  FirstName VARCHAR(20) NOT NULL,
+  LastName VARCHAR(20) NOT NULL,
+  Address VARCHAR(50)NOT NULL,
+  ContactNumber INT(10)NOT NULL,
+  FieldName VARCHAR(20)NOT NULL,
+  Gender VARCHAR(6)NOT NULL,
+  DOBYear INT(4)NOT NULL,
+  DOBMonth VARCHAR(15)NOT NULL,
+  DOBDate INT(2)NOT NULL,
+  Age INT(3)NOT NULL,
+  CONSTRAINT PRIMARY KEY(MemberID),
+  CONSTRAINT FOREIGN KEY(WardID) REFERENCES warddetails(WardID) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=INNODB; 
+  
+
+
+
+CREATE VIEW Doctor AS SELECT  EmpID, FirstName, LastName, WardName, Address, ContactNumber, Gender, DOBYear, DOBMonth, DOBDate, Age  FROM employee_details CROSS JOIN ward_details USING(WardID)  WHERE Post='Doctor' ORDER BY EmpID DESC;
+
+
+   String Q = "SELECT * FROM treatmentdetails CROSS JOIN patientdetails USING(RegID) WHERE RegID=(?)";
+           PS = (com.mysql.jdbc.PreparedStatement) C.prepareStatement(Q);
+           System.out.println("get All Treatment 2");
+           PS.setString(1, ATr.getRegID()); 
+           System.out.println("get All Treatment 3");   
+           RS = PS.executeQuery();
+           System.out.println("get All Treatment 4");
+
+
